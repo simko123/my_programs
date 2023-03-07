@@ -7,36 +7,44 @@ struct product {
 };
 
 product inputNewProduct() {
-        product newProduct;
-        std::cout << "Введите название товара: "; std::cin >> newProduct.name;
-        std::cout << "Введите цену товара: "; std::cin >> newProduct.price;
-        std::cout << "Введите количество товара: "; std::cin >> newProduct.amount;
-        return newProduct;
+    product newProduct;
+    std::cout << "Введите название товара: "; 
+    std::cin >> newProduct.name;
+    std::cout << "Введите цену товара: "; 
+    std::cin >> newProduct.price;
+    std::cout << "Введите количество товара: "; 
+    std::cin >> newProduct.amount;
+    return newProduct;
 }
 
 class Products {
 public:
     Products(){ };
 
-    void insertTo(int option, product newProduct) {
+    // Вставка товара на определенную позицию.
+    // 0 - начало, -1 - конец, 
+    // любой другой номер - вставка после него.
+    void insertTo(int pos, product newProduct) {
+        // Проверим, существуют товары с тем же именем.
+        // Если да, увеличим количество и спросим, желает ли пользователь сменить цену.
         for (product &prod : products) {
             if (newProduct.name == prod.name) {
                 prod.amount += newProduct.amount;
                 if (prod.price != newProduct.price) {
-                    bool decision;
-                    std::cout << "Вы хотите сменить цену товара? [1 - да / 0 - нет]: ";
+                    char decision;
+                    std::cout << "Вы хотите сменить цену товара? [y/n]: ";
                     std::cin >> decision;
-                    if (decision) prod.price = newProduct.price;
+                    if (decision == 'y' || decision == 'Y') prod.price = newProduct.price;
                 }
                 return;
             }
         }
-        if (option == -1) products.push_back(newProduct);
-        else if (option >= 0) products.insert(products.begin() + option, newProduct);
+        if (pos == -1) products.push_back(newProduct);
+        else if (pos >= 0) products.insert(products.begin() + pos, newProduct);
     }
 
-    void removeFrom(unsigned position) {
-        products.erase(products.begin() + position - 1);
+    void removeFrom(unsigned pos) {
+        products.erase(products.begin() + pos - 1);
     }
 
     void info(unsigned pos) {
@@ -44,7 +52,8 @@ public:
         std::cout << std::endl <<
             "Название: " << products.at(pos).name << std::endl <<
             "Цена: " << products.at(pos).price << std::endl <<
-            "Количество: " << products.at(pos).amount << std::endl << std::endl;
+            "Количество: " << products.at(pos).amount << std::endl 
+        << std::endl;
     }
 
     void printAll() {
@@ -68,6 +77,7 @@ private:
 };
 
 int main() {
+    setlocale(LC_ALL, "Russian");
     Products products;
     while (true) {
         std::cout <<
@@ -78,7 +88,8 @@ int main() {
             "5. Удалить определенный товар из списка." << std::endl <<
             "6. Вывести на экран информацию о выбранном товаре." << std::endl <<
             "7. Вывести на экран весь список целиком." << std::endl <<
-            "0. Выйти из программы." << std::endl;
+            "0. Выйти из программы." 
+        << std::endl;
         char option;
         std::cin >> option;
         switch (option) {
@@ -97,7 +108,9 @@ int main() {
             case '3': {
                 product newProduct = inputNewProduct();
                 unsigned pos;
-                std::cout << "Введите номер позиции, перед которой добавить товар: "; std::cin >> pos;
+                products.printAll(); 
+                std::cout << "Введите номер позиции, перед которой добавить товар: "; 
+                std::cin >> pos;
                 products.insertTo(pos - 1, newProduct);
                 std::cout << "Товар успешно добавлен!" << std::endl;
                 break;
@@ -105,7 +118,9 @@ int main() {
             case '4': {
                 product newProduct = inputNewProduct();
                 unsigned pos;
-                std::cout << "Введите номер позиции, после которой добавить товар: "; std::cin >> pos;
+                products.printAll();
+                std::cout << "Введите номер позиции, после которой добавить товар: "; 
+                std::cin >> pos;
                 products.insertTo(pos, newProduct);
                 std::cout << "Товар успешно добавлен!" << std::endl;
                 break;
@@ -117,7 +132,8 @@ int main() {
                 }
                 products.printAll();
                 unsigned pos;
-                std::cout << "Введите номер позиции для удаления: "; std::cin >> pos;
+                std::cout << "Введите номер позиции для удаления: "; 
+                std::cin >> pos;
                 if (pos > products.size()) {
                     std::cout << "Позиции не существует." << std::endl;
                     break;
@@ -132,7 +148,8 @@ int main() {
                 }
                 unsigned pos;
                 products.printAll();
-                std::cout << "Введите номер позиции, о которой хотите получить информацию: "; std::cin >> pos;
+                std::cout << "Введите номер позиции, о которой хотите получить информацию: "; 
+                std::cin >> pos;
                 if (pos > products.size()) {
                     std::cout << "Позиции не существует." << std::endl;
                     break;

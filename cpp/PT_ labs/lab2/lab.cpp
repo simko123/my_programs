@@ -2,7 +2,7 @@
 
 class Vector {
 public:
-    inline static unsigned count;
+    static unsigned count;
     
     Vector(unsigned d, double *values);
     Vector(const Vector &vec);
@@ -98,11 +98,14 @@ int main() {
            v3(2, val3),
            v4(3, val4);
     
-    std::cout << v1 << " + " << v2 << " = " << v1 + v2 << std::endl << 
-                 v4 << " - " << v2 << " = " << v4 - v2 << std::endl <<
-                 v1 << " * " << v4 << " = " << v1 * v4 << std::endl <<
-                 "-" << v3 << " = " << -v3 << std::endl <<
-                 "Copying v3 ..." << std::endl;
+    std::cout << 
+        v1 << " + " << v2 << " = " << v1 + v2 << std::endl << 
+        v4 << " - " << v2 << " = " << v4 - v2 << std::endl <<
+        v1 << " * " << v4 << " = " << v1 * v4 << std::endl <<
+        "-" << v3 << " = " << -v3 << std::endl <<
+        "Copying v3 ..." 
+    << std::endl;
+    
     Vector v5 = v3;
     std::cout << v3 << std::endl << v5 << std::endl;
         
