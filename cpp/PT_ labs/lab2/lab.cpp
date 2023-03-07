@@ -2,7 +2,7 @@
 
 class Vector {
 public:
-    static unsigned count;
+    inline static unsigned count;
     
     Vector(unsigned d, double *values);
     Vector(const Vector &vec);
