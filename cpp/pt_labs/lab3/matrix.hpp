@@ -1,7 +1,7 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
-#include "vector.cpp"
+#include "vector.hpp"
 
 class Matrix {
     
@@ -9,10 +9,10 @@ public:
 
     inline static uint count;
 
-    Matrix(uint squareSize, double** values);
-    Matrix(uint rows, uint columns, double** values);
+    Matrix(uint squareSize, double** arr);
+    Matrix(uint rows, uint columns, double** arr);
     Matrix(const Matrix& m);
-   ~Matrix(){};
+   ~Matrix();
 
     void print();
 
@@ -20,7 +20,7 @@ public:
     Matrix operator- (const Matrix& m);
     Matrix operator- ();
     Matrix operator* (const Matrix& m);
-    Matrix operator* (const Vector& v);
+    Vector operator* (const Vector& v);
     Matrix operator* (double num);
     Matrix operator= (const Matrix& m);
 
@@ -30,6 +30,9 @@ private:
     uint columns;
     uint  number;
     double** val;
+
+    double rowProd(uint i);
+    double colProd(uint j);
 
 };
 

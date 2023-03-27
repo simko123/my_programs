@@ -3,7 +3,8 @@
 
 struct product {
     std::string name;
-    unsigned price, amount;
+    float price;
+    unsigned amount;
 };
 
 product inputNewProduct() {

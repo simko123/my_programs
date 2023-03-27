@@ -15,7 +15,7 @@ public:
     double angleTo(const Vector& vec); // todo
     double mod();
 
-    friend std::ostream& operator<< (std::ostream &out, const Vector &vec); 
+    friend std::ostream& operator<< (std::ostream& out, const Vector& vec); 
     Vector operator+ (const Vector &vec);
     Vector operator- (const Vector &vec);
     Vector operator- ();

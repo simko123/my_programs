@@ -6,15 +6,15 @@ public:
     
     Vector(unsigned d, double *values);
     Vector(const Vector &vec);
-    Vector();
-    ~Vector();
+    Vector(){};
+    ~Vector(){};
 
-    friend std::ostream& operator<< (std::ostream &out, const Vector &vec); 
-    Vector operator+ (const Vector &vec);
-    Vector operator- (const Vector &vec);
+    friend std::ostream& operator<< (std::ostream& out, const Vector& vec); 
+    Vector operator+ (const Vector& vec);
+    Vector operator- (const Vector& vec);
     Vector operator- ();
-    Vector operator= (const Vector &vec);
-    double operator* (const Vector &vec);
+    Vector operator= (const Vector& vec);
+    double operator* (const Vector& vec);
 
 private:
     unsigned dim, number;
