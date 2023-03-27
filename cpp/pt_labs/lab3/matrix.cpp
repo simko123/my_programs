@@ -3,17 +3,19 @@
 #include "matrix.hpp"
 #include "vector.hpp"
 
-Matrix::Matrix(uint squareSize, double** arr) {
+// гит из айдешки реально работает???
+
+Matrix::Matrix(unsigned squareSize, double** arr) {
 
     this->number = ++count;
     this->rows = squareSize;
     this->columns = squareSize;
 
     this->val = new double* [squareSize];
-    for (uint i = 0; i < squareSize; ++i) this->val[i] = new double [squareSize];
+    for (unsigned i = 0; i < squareSize; ++i) this->val[i] = new double [squareSize];
     
-    for (uint i = 0; i < squareSize; ++i) {
-        for (uint j = 0; j < squareSize; ++j) {
+    for (unsigned i = 0; i < squareSize; ++i) {
+        for (unsigned j = 0; j < squareSize; ++j) {
             this->val[i][j] = arr[i][j];
         }
     }
@@ -21,17 +23,17 @@ Matrix::Matrix(uint squareSize, double** arr) {
     std::cout << "Matrix #" << this->number << " has been generated." << std::endl;
 }
 
-Matrix::Matrix(uint rows, uint columns, double** arr) {
+Matrix::Matrix(unsigned rows, unsigned columns, double** arr) {
 
     this->number = ++count;
     this->rows = rows;
     this->columns = columns;
 
     this->val = new double* [rows];
-    for (uint i = 0; i < rows; ++i) this->val[i] = new double [columns];
+    for (unsigned i = 0; i < rows; ++i) this->val[i] = new double [columns];
 
-    for (uint i = 0; i < rows; ++i) {
-        for (uint j = 0; j < columns; ++j) {
+    for (unsigned i = 0; i < rows; ++i) {
+        for (unsigned j = 0; j < columns; ++j) {
             this->val[i][j] = arr[i][j];
         }
     }
@@ -46,10 +48,10 @@ Matrix::Matrix(const Matrix& m) {
     this->columns = m.columns;
 
     this->val = new double* [rows];
-    for (uint i = 0; i < rows; ++i) this->val[i] = new double [columns];
+    for (unsigned i = 0; i < rows; ++i) this->val[i] = new double [columns];
 
-    for (uint i = 0; i < m.rows; ++i) {
-        for (uint j = 0; j < m.columns; ++j) {
+    for (unsigned i = 0; i < m.rows; ++i) {
+        for (unsigned j = 0; j < m.columns; ++j) {
             this->val[i][j] = m.val[i][j];
         }
     }
@@ -58,7 +60,7 @@ Matrix::Matrix(const Matrix& m) {
 }
 
 Matrix::~Matrix() {
-    for (uint i = 0; i < rows; ++i) delete [] this->val[i];   
+    for (unsigned i = 0; i < rows; ++i) delete [] this->val[i];
     delete [] this->val; 
     std::cout << "Matrix #" << this->number << " has been deleted." << std::endl;
 }
@@ -68,9 +70,9 @@ Matrix Matrix::operator+ (const Matrix& m) {
         throw std::exception();
     } else {
         double** result = new double* [m.rows];
-        for (uint i = 0; i < rows; ++i) result[i] = new double [m.columns];
-        for (uint i = 0; i < rows; ++i) {
-            for (uint j = 0; j < columns; ++j) {
+        for (unsigned i = 0; i < rows; ++i) result[i] = new double [m.columns];
+        for (unsigned i = 0; i < rows; ++i) {
+            for (unsigned j = 0; j < columns; ++j) {
                 result[i][j] = this->val[i][j] +
                                    m.val[i][j];
             }
@@ -84,11 +86,11 @@ Matrix Matrix::operator- (const Matrix& m) {
         throw std::exception();
     } else {
         double** result = new double* [m.rows];
-        for (uint i = 0; i < rows; ++i) {
+        for (unsigned i = 0; i < rows; ++i) {
             result[i] = new double [m.columns];
         }
-        for (uint i = 0; i < rows; ++i) {
-            for (uint j = 0; j < columns; ++j) {
+        for (unsigned i = 0; i < rows; ++i) {
+            for (unsigned j = 0; j < columns; ++j) {
                 result[i][j] = this->val[i][j] -
                                    m.val[i][j];
             }
@@ -99,8 +101,8 @@ Matrix Matrix::operator- (const Matrix& m) {
 
 Matrix Matrix::operator- () {
     Matrix m(*this);
-    for (uint i = 0; i < m.rows; ++i) {
-        for (uint j = 0; j < m.columns; ++j) {
+    for (unsigned i = 0; i < m.rows; ++i) {
+        for (unsigned j = 0; j < m.columns; ++j) {
             m.val[i][j] = -(m.val[i][j]);
         }
     }
@@ -108,11 +110,12 @@ Matrix Matrix::operator- () {
 }
 
 
-double Matrix::rowProd(uint i) {
+double Matrix::rowProd(unsigned i) {
     double sum = 0;
-    for (uint j = 0; j < this->columns; ++j) {
-        sum += this->val[i][j];
+    for (unsigned j = 0; j < this->columns; ++j) {
+        sum *= this->val[i][j];
     }
+    return sum;
 }
 
 Matrix Matrix::operator* (const Matrix& m) {
@@ -121,24 +124,25 @@ Matrix Matrix::operator* (const Matrix& m) {
     } else {
 
         double** result = new double* [this->rows];
-        for (uint i = 0; i < this->rows; ++i) {
+        for (unsigned i = 0; i < this->rows; ++i) {
             result[i] = new double [m.columns];
         }
 
-        for (uint i = 0; i < this->rows; ++i) {
-            for (uint j = 0; j < m.columns; ++j) {
+        for (unsigned i = 0; i < this->rows; ++i) {
+            for (unsigned j = 0; j < m.columns; ++j) {
                 result[i][j] = 0; // !
             }
         }
     }
+    return Matrix(0, nullptr); // !
 }
 
 // m*v
 
 Matrix Matrix::operator* (double n) {
     Matrix m(*this);
-    for (uint i = 0; i < m.rows; ++i) {
-        for (uint j = 0; j < m.columns; ++j) {
+    for (unsigned i = 0; i < m.rows; ++i) {
+        for (unsigned j = 0; j < m.columns; ++j) {
             m.val[i][j] *= n;
         }
     }

@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++17-extensions"
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
@@ -7,10 +9,10 @@ class Matrix {
     
 public:
 
-    inline static uint count;
+    inline static unsigned count;
 
-    Matrix(uint squareSize, double** arr);
-    Matrix(uint rows, uint columns, double** arr);
+    Matrix(unsigned squareSize, double** arr);
+    Matrix(unsigned rows, unsigned columns, double** arr);
     Matrix(const Matrix& m);
    ~Matrix();
 
@@ -26,13 +28,13 @@ public:
 
 private:
 
-    uint    rows;
-    uint columns;
-    uint  number;
-    double** val;
+    unsigned    rows;
+    unsigned columns;
+    unsigned  number;
+    double**     val;
 
-    double rowProd(uint i);
-    double colProd(uint j);
+    double rowProd(unsigned i);
+    double colProd(unsigned j);
 
 };
 

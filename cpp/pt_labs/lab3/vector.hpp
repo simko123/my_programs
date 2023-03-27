@@ -5,9 +5,9 @@
 
 class Vector {
 public:
-    inline static uint count;
+    inline static unsigned count;
     
-    Vector(uint dim, double *values);
+    Vector(unsigned dim, double *values);
     Vector(const Vector &vec);
     Vector(){};
     ~Vector();
@@ -20,7 +20,7 @@ public:
     double operator* (const Vector &vec);
 
 private:
-    uint dim, number;
+    unsigned dim, number;
     double *val;
 };
 
