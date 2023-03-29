@@ -3,8 +3,6 @@
 #include "matrix.hpp"
 #include "vector.hpp"
 
-// гит из айдешки реально работает???
-
 Matrix::Matrix(unsigned squareSize, double** arr) {
 
     this->number = ++count;
@@ -19,8 +17,6 @@ Matrix::Matrix(unsigned squareSize, double** arr) {
             this->val[i][j] = arr[i][j];
         }
     }
-
-    std::cout << "Matrix #" << this->number << " has been generated." << std::endl;
 }
 
 Matrix::Matrix(unsigned rows, unsigned columns, double** arr) {
@@ -37,8 +33,6 @@ Matrix::Matrix(unsigned rows, unsigned columns, double** arr) {
             this->val[i][j] = arr[i][j];
         }
     }
-
-    std::cout << "Matrix #" << this->number << " has been generated." << std::endl;
 }
 
 Matrix::Matrix(const Matrix& m) {
@@ -47,22 +41,31 @@ Matrix::Matrix(const Matrix& m) {
     this->rows = m.rows;
     this->columns = m.columns;
 
-    this->val = new double* [rows];
-    for (unsigned i = 0; i < rows; ++i) this->val[i] = new double [columns];
+    this->val = new double* [m.rows];
+    for (unsigned i = 0; i < m.rows; ++i) this->val[i] = new double [m.columns];
 
     for (unsigned i = 0; i < m.rows; ++i) {
         for (unsigned j = 0; j < m.columns; ++j) {
             this->val[i][j] = m.val[i][j];
         }
     }
+}
 
-    std::cout << "Matrix #" << this->number << " has been generated." << std::endl;
+Matrix& Matrix::operator= (const Matrix& m) {
+    this->rows = m.rows;
+    this->columns = m.columns;
+    this->number = ++count;
+    for (unsigned i = 0; i < this->rows; ++i) {
+        for (unsigned j = 0; j < this->rows; ++j) {
+            this->val[i][j] = m.val[i][j];
+        }
+    }
+    return *this;
 }
 
 Matrix::~Matrix() {
     for (unsigned i = 0; i < rows; ++i) delete [] this->val[i];
-    delete [] this->val; 
-    std::cout << "Matrix #" << this->number << " has been deleted." << std::endl;
+    delete [] this->val;
 }
 
 Matrix Matrix::operator+ (const Matrix& m) {
@@ -77,7 +80,12 @@ Matrix Matrix::operator+ (const Matrix& m) {
                                    m.val[i][j];
             }
         }
-        return Matrix(m.rows, m.columns, result);
+        Matrix matrix(m.rows, m.columns, result);
+        for (unsigned i = 0; i < this->rows; ++i) {
+            delete [] result[i];
+        }
+        delete [] result;
+        return matrix;
     }
 }
 
@@ -86,7 +94,7 @@ Matrix Matrix::operator- (const Matrix& m) {
         throw std::exception();
     } else {
         double** result = new double* [m.rows];
-        for (unsigned i = 0; i < rows; ++i) {
+        for (unsigned i = 0; i < m.rows; ++i) {
             result[i] = new double [m.columns];
         }
         for (unsigned i = 0; i < rows; ++i) {
@@ -95,7 +103,12 @@ Matrix Matrix::operator- (const Matrix& m) {
                                    m.val[i][j];
             }
         }
-        return Matrix(m.rows, m.columns, result);
+        Matrix matrix(m.rows, m.columns, result);
+        for (unsigned i = 0; i < m.rows; ++i) {
+            delete [] result[i];
+        }
+        delete [] result;
+        return matrix;
     }
 }
 
@@ -110,12 +123,18 @@ Matrix Matrix::operator- () {
 }
 
 
-double Matrix::rowProd(unsigned i) {
-    double sum = 0;
-    for (unsigned j = 0; j < this->columns; ++j) {
-        sum *= this->val[i][j];
+Vector Matrix::vectorRow(unsigned i) const {
+    return Vector(this->columns, this->val[i]);
+}
+
+Vector Matrix::vectorCol(unsigned j) const {
+    double* column = new double[this->rows];
+    for (unsigned i = 0; i < this->rows; ++i) {
+        column[i] = this->val[i][j];
     }
-    return sum;
+    Vector v(this->rows, column);
+    delete [] column;
+    return v;
 }
 
 Matrix Matrix::operator* (const Matrix& m) {
@@ -130,14 +149,35 @@ Matrix Matrix::operator* (const Matrix& m) {
 
         for (unsigned i = 0; i < this->rows; ++i) {
             for (unsigned j = 0; j < m.columns; ++j) {
-                result[i][j] = 0; // !
+                result[i][j] = this->vectorRow(i) * m.vectorCol(j);
             }
         }
+        Matrix matrix(this->rows, m.columns, result);
+        for (unsigned i = 0; i < this->rows; ++i) {
+            delete [] result[i];
+        }
+        delete [] result;
+        return matrix;
     }
-    return Matrix(0, nullptr); // !
 }
 
-// m*v
+Vector Matrix::operator* (const Vector& v) {
+    if (this->rows != v.getDim()) {
+        throw std::exception();
+    } else {
+        double* result = new double[this->rows];
+        for (unsigned i = 0; i < this->rows; ++i) {
+            result[i] = 0;
+            for (unsigned j = 0; j < this->columns; ++j) {
+                result[i] += this->val[i][j] * v.at(j);
+            }
+        }
+        Vector vec(this->rows, result);
+        delete[] result;
+        return vec;
+    }
+
+}
 
 Matrix Matrix::operator* (double n) {
     Matrix m(*this);
@@ -147,4 +187,14 @@ Matrix Matrix::operator* (double n) {
         }
     }
     return m;
+}
+
+void Matrix::print() {
+    std::cout << "Matrix #" << this->number << std::endl;
+    for (unsigned i = 0; i < this->rows; ++i) {
+        for (unsigned j = 0; j < this->columns; ++j) {
+            std::cout << this->val[i][j] << ' ';
+        }
+        std::cout << std::endl;
+    }
 }

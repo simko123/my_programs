@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wc++17-extensions"
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
@@ -23,8 +21,8 @@ public:
     Matrix operator- ();
     Matrix operator* (const Matrix& m);
     Vector operator* (const Vector& v);
-    Matrix operator* (double num);
-    Matrix operator= (const Matrix& m);
+    Matrix operator* (double n);
+    Matrix& operator= (const Matrix& m);
 
 private:
 
@@ -33,8 +31,8 @@ private:
     unsigned  number;
     double**     val;
 
-    double rowProd(unsigned i);
-    double colProd(unsigned j);
+    Vector vectorRow(unsigned i) const;
+    Vector vectorCol(unsigned j) const;
 
 };
 

@@ -2,16 +2,19 @@
 #include "vector.hpp"
 
 Vector::Vector(unsigned d, double *values) {
-    dim = d;
-    val = new double[d];
+    this->dim = d;
+    this->val = new double[d];
     for (int i = 0; i < d; ++i) val[i] = values[i];
-    number = ++count;
+    this->number = ++count;
 }
 
 Vector::Vector(const Vector& vec) {
-    for (unsigned i = 0; i < vec.dim; ++i) val[i] = vec.val[i];
-    dim = vec.dim;
-    number = ++count;
+    this->dim = vec.dim;
+    this->number = ++count;
+    this->val = new double[vec.dim];
+    for (unsigned i = 0; i < vec.dim; ++i) {
+        this->val[i] = vec.at(i);
+    }
 }
 
 Vector::~Vector() {
@@ -64,6 +67,11 @@ double Vector::operator* (const Vector& vec) {
     }
 }
 
-Vector Vector::operator= (const Vector& vec) {
-    return Vector(vec);
+Vector& Vector::operator= (const Vector& vec) {
+    this->dim = vec.dim;
+    this->number = ++count;
+    for (unsigned i = 0; i < this->dim; ++i) {
+        this->val[i] = vec.val[i];
+    }
+    return *this;
 }
