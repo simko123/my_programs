@@ -1,3 +1,0 @@
-C:/Users/simko/Desktop/my_programs/cpp/pt_labs/lab3/cmake-build-debug/CMakeFiles/lab3.dir
-C:/Users/simko/Desktop/my_programs/cpp/pt_labs/lab3/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/simko/Desktop/my_programs/cpp/pt_labs/lab3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
