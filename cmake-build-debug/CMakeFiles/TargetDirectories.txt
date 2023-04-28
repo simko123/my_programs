@@ -1,3 +1,0 @@
-C:/Users/simko/Desktop/my_programs/cmake-build-debug/CMakeFiles/my_programs.dir
-C:/Users/simko/Desktop/my_programs/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/simko/Desktop/my_programs/cmake-build-debug/CMakeFiles/rebuild_cache.dir
