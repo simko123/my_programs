@@ -2,14 +2,14 @@
 
 class Vector {
 public:
-    inline static unsigned count;
+    static unsigned count;
     
     Vector(unsigned d, double *values);
     Vector(const Vector &vec);
     Vector(){};
     ~Vector(){};
 
-    friend std::ostream& operator<< (std::ostream& out, const Vector& vec); 
+    friend std::ostream& operator<< (std::ostream& out, const Vector& vec); // вот это уже мой личный выебон, лучше вместо него напиши метод .print()
     Vector operator+ (const Vector& vec);
     Vector operator- (const Vector& vec);
     Vector operator- ();
@@ -20,6 +20,8 @@ private:
     unsigned dim, number;
     double *val;
 };
+
+unsigned Vector::count = 0;
 
 Vector::Vector(unsigned d, double *values) {
     dim = d;
@@ -93,6 +95,7 @@ int main() {
            val2[3] = {8,3,2.5},
            val3[2] = {10,10},
            val4[3] = {7,9,2};
+    extended x = 0.00000;
     Vector v1(3, val1),
            v2(3, val2),
            v3(2, val3),
@@ -111,4 +114,3 @@ int main() {
         
     return 0;
 }
-#pragma clang diagnostic pop

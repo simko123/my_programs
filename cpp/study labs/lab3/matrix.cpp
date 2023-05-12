@@ -3,11 +3,8 @@
 #include "matrix.hpp"
 #include "vector.hpp"
 
-<<<<<<< HEAD
 unsigned Matrix::count = 0;
 
-=======
->>>>>>> 7c088fcc5ecc3009bfac17245fac4ba7ed54bfd2
 Matrix::Matrix(unsigned squareSize, double** arr) {
 
     this->number = ++count;
@@ -57,10 +54,6 @@ Matrix::Matrix(const Matrix& m) {
 }
 
 Matrix& Matrix::operator= (const Matrix& m) {
-<<<<<<< HEAD
-    std::cout << "RAVNOOOOOO\n";
-=======
->>>>>>> 7c088fcc5ecc3009bfac17245fac4ba7ed54bfd2
     this->rows = m.rows;
     this->columns = m.columns;
     this->number = ++count;
@@ -73,7 +66,6 @@ Matrix& Matrix::operator= (const Matrix& m) {
 }
 
 Matrix::~Matrix() {
-    std::cout << "IMDYING\n";
     for (unsigned i = 0; i < rows; ++i) delete [] this->val[i];
     delete [] this->val;
 }
