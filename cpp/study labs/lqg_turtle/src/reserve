@@ -1,0 +1,79 @@
+#include <chrono>
+#include <functional>
+#include <memory>
+#include <string>
+#include "rclcpp/rclcpp.hpp"
+#include "geometry_msgs/msg/twist.hpp"
+#include "geometry_msgs/msg/twist_stamped.hpp"
+#include "geometry_msgs/msg/twist_stamped.h"
+#include "sensor_msgs/msg/laser_scan.hpp"
+
+using namespace std::chrono_literals;
+
+class TurtleBotController : public rclcpp::Node
+{
+public:
+  TurtleBotController()
+  : Node("turtlebot_controller"), obstacle_detected_(false)
+  {
+    // Publisher for velocity commands (cmd_vel topic)
+    publisher_ = this->create_publisher<geometry_msgs::msg::TwistStamped>("/cmd_vel", 10);
+    
+    // Subscriber for laser scan data (scan topic)
+    subscriber_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
+      "/scan", 10, std::bind(&TurtleBotController::laser_callback, this, std::placeholders::_1));
+
+    // Timer to publish velocity commands periodically
+    timer_ = this->create_wall_timer(
+      100ms, std::bind(&TurtleBotController::publish_cmd_vel, this));
+  }
+
+private:
+  void laser_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
+  {
+    // Check if any obstacle is within a certain range (e.g., 0.5 meters) in front of the robot
+    obstacle_detected_ = false;
+    float min_distance = 0.5;
+    
+    // The LIDAR data provides an array of ranges. We check the frontal range values.
+    // For a simple check, we can look at a range of indices around the front of the robot (e.g., first and last few degrees).
+    // The exact indices depend on the robot's configuration. Assuming 0 is the front.
+    // The ranges array size is 360 for the TurtleBot3.
+
+    for (size_t i = 0; i < msg->ranges.size(); ++i) {
+      if (msg->ranges[i] < min_distance && msg->ranges[i] > msg->range_min) {
+        obstacle_detected_ = true;
+        RCLCPP_INFO(this->get_logger(), "Obstacle detected at index %zu, distance: %f m", i, msg->ranges[i]);
+        break; // Stop checking once an obstacle is found
+      }
+    }
+  }
+
+  void publish_cmd_vel()
+  {
+    auto twist_msg = geometry_msgs::msg::TwistStamped();
+    if (obstacle_detected_) {
+      twist_msg.twist.linear.x = 0.0;
+      twist_msg.twist.angular.z = 0.0;
+      RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Stopping due to obstacle!");
+    } else {
+      twist_msg.twist.linear.x = 1;
+      twist_msg.twist.angular.z = 0.0;
+      RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 2000, "Moving forward...");
+    }
+    publisher_->publish(twist_msg);
+  }
+
+  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr publisher_;
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr subscriber_;
+  rclcpp::TimerBase::SharedPtr timer_;
+  bool obstacle_detected_;
+};
+
+int main(int argc, char * argv[])
+{
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<TurtleBotController>());
+  rclcpp::shutdown();
+  return 0;
+}
