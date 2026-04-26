@@ -1,5 +1,5 @@
-# В этом репозитории собраны почти все мои программы, написанные в процессе обучения. От всяких игрушек и петов до университетских лаб.
-## Если вы здесь, то вы или мой будущий работодатель, или коллега по цеху.  
+# This repository contains almost all of the programs I’ve written during my studies, from little pets and scripts to university lab projects.
+## If you’re here, you’re either my future employer or a colleague.  
 ```cpp
-// иначе что вы тут вообще делаете?
+// Otherwise, what are you even doing here?
 ```
